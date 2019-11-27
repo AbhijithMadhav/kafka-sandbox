@@ -1,0 +1,33 @@
+What happens when the poll interval is shorter than the time required for consumers to consumer messages obtained in a single poll?
+
+""
+Oct 02, 2019 5:50:51 PM org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer run
+SEVERE: Container exception
+org.apache.kafka.clients.consumer.CommitFailedException: Commit cannot be completed since the group has already rebalanced and assigned the partitions to another member. This means that the time between subsequent calls to poll() was longer than the configured max.poll.interval.ms, which typically implies that the poll loop is spending too much time message processing. You can address this either by increasing the session timeout or by reducing the maximum size of batches returned in poll() with max.poll.records.
+	at org.apache.kafka.clients.consumer.internals.ConsumerCoordinator.sendOffsetCommitRequest(ConsumerCoordinator.java:725)
+	at org.apache.kafka.clients.consumer.internals.ConsumerCoordinator.commitOffsetsSync(ConsumerCoordinator.java:604)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.commitSync(KafkaConsumer.java:1174)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.ackCurrent(KafkaMessageListenerContainer.java:1020)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.doInvokeRecordListener(KafkaMessageListenerContainer.java:987)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.doInvokeWithRecords(KafkaMessageListenerContainer.java:959)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.invokeRecordListener(KafkaMessageListenerContainer.java:901)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.invokeListener(KafkaMessageListenerContainer.java:786)
+	at org.springframework.kafka.listener.KafkaMessageListenerContainer$ListenerConsumer.run(KafkaMessageListenerContainer.java:656)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.lang.Thread.run(Thread.java:748)
+""
+
+1. Commit strategy is RECORD(even manual can be chosen)
+// factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.RECORD);
+
+2. Reduce poll interval from default of 50000 to 5000
+// props.put(MAX_POLL_INTERVAL_MS_CONFIG, 5000);
+
+3. Spend more than 5000 ms in consumer
+// Thread.sleep(5000)
+
+After partition is unassigned to consumer it's commit start failing and it repeats reading from the same offset
+
+Note:
+To reproduce, if the default autocommit is used the above exception is not seen(maybe because the commits happens behind the scenes), the consumers read from the same offset though
