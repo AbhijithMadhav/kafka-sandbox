@@ -82,12 +82,11 @@ public class PausingConsumerApplication {
                     };
                     Timer timer = new Timer("timerTask", false);
                     timer.schedule(timerTask, delay);
-                    continue;
+                } else {
+                    LOGGER.info("Delay executed. Pushing this out, {}", record);
+                    // TODO : Pump into another kafka topic
+                    consumer.commitSync();
                 }
-
-                LOGGER.info("Delay executed. Pushing this out, {}", record);
-                // TODO : Pump into another kafka topic
-                consumer.commitSync();
             }
         }
     }
