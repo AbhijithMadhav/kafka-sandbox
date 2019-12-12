@@ -37,6 +37,7 @@ public class BatchCommitConfig {
         ConcurrentKafkaListenerContainerFactory<Long, AppEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(nConsumers);
+        //factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.BATCH);
         factory.setBatchListener(true);
 
@@ -55,6 +56,7 @@ public class BatchCommitConfig {
         props.put(GROUP_ID_CONFIG, "batch-consumers");
 
         props.put(ENABLE_AUTO_COMMIT_CONFIG, false);
+
 
         //props.put(MAX_POLL_RECORDS_CONFIG, 10);
         //props.put(MAX_PARTITION_FETCH_BYTES_CONFIG, 128);
