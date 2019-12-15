@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

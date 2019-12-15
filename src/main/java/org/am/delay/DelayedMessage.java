@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import java.io.Serializable;
 import java.time.Instant;

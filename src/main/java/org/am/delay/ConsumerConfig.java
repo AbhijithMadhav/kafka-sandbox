@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 
 @EnableKafka
-@PropertySource(value = {"classpath:/pause/consumer.properties"})
+@PropertySource(value = {"classpath:/delay/consumer.properties"})
 @Configuration
 class ConsumerConfig {
 
@@ -50,7 +50,6 @@ class ConsumerConfig {
         }
         if (!propertySource.containsProperty(propertyName))
             throw new RuntimeException("property not found : " + propertyName);
-        System.out.println(propertySource.getProperty(propertyName));
         return propertySource.getProperty(propertyName);
     }
 

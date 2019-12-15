@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,14 +7,14 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-public class TestProducer {
+public class Producer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestProducer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
 
     private final KafkaTemplate<Long, String> kafkaTemplate;
     private final String topicName;
 
-    public TestProducer(KafkaTemplate<Long, String> kafkaTemplate, String topicName) {
+    public Producer(KafkaTemplate<Long, String> kafkaTemplate, String topicName) {
         this.kafkaTemplate = kafkaTemplate;
         this.topicName = topicName;
     }

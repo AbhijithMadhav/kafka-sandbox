@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -32,7 +32,6 @@ public class PausingConsumer {
 
         // Single partition consumer
         // TODO : how quickly can it jettison messages?
-        System.out.println("Assignment : " + consumer.assignment());
         //Validate.isTrue(consumer.assignment().size() == 1);
     }
 

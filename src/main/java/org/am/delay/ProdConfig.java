@@ -1,4 +1,4 @@
-package org.am.consumers.pause;
+package org.am.delay;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
@@ -21,8 +21,8 @@ import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS
 
 @EnableKafka
 @Configuration
-@PropertySource("classpath:/pause/producer.properties")
-public class TestProducerKafkaConfig {
+@PropertySource("classpath:/delay/producer.properties")
+public class ProdConfig {
 
     @Autowired
     private Environment environment;
@@ -53,8 +53,8 @@ public class TestProducerKafkaConfig {
     }
 
     @Bean
-    public TestProducer producer() {
-        return new TestProducer(kafkaTemplate(), String.valueOf(getProperty("topic-name")));
+    public Producer producer() {
+        return new Producer(kafkaTemplate(), String.valueOf(getProperty("topic-name")));
     }
 
 
