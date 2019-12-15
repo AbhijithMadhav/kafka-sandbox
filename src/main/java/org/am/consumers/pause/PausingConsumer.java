@@ -12,38 +12,33 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.am.consumers.pause.TestProducerApplication.TOPIC;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.ISOLATION_LEVEL_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 
 public class PausingConsumer {
 
-    // List of partitions to which this consumer instance listens
-    // TODO : Need to dynamically determine partition assignment
     private static AtomicBoolean partitionPaused = new AtomicBoolean(false);
     private final static Logger LOGGER = LoggerFactory.getLogger(PausingConsumer.class);
+    private final KafkaConsumer<Long, String> consumer;
+    private final Duration validAfterDuration;
+    private final Duration pollIntervalDuration;
 
-    private final static long VALID_AFTER_DURATION_IN_SECS = 10;
+    public PausingConsumer(KafkaConsumer<Long, String> consumer, Duration validAfterDuration, Duration pollIntervalDuration) {
+        this.consumer = consumer;
+        this.validAfterDuration = validAfterDuration;
+        this.pollIntervalDuration = pollIntervalDuration;
+
+        // Single partition consumer
+        // TODO : how quickly can it jettison messages?
+        System.out.println("Assignment : " + consumer.assignment());
+        //Validate.isTrue(consumer.assignment().size() == 1);
+    }
+
+
     public void consume() {
 
-        Properties props = new Properties();
-        props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(GROUP_ID_CONFIG, "pausing-consumers");
-        props.put(ENABLE_AUTO_COMMIT_CONFIG, "false");
-        props.put(ISOLATION_LEVEL_CONFIG, "read_committed");
-        props.put(KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer");
-        props.put(VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer"); // TODO : custom serializer needed for custom message
-        KafkaConsumer<Long, Long> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Arrays.asList(TOPIC));
         while (true) {
 
             // Resume partitions where messages need to be dequeued
@@ -54,7 +49,7 @@ public class PausingConsumer {
                 }
             }
 
-            ConsumerRecords<Long, Long> records = consumer.poll(1000);
+            ConsumerRecords<Long, String> records = consumer.poll(pollIntervalDuration.toMillis());
 
             if (records.isEmpty()) {
                 //LOGGER.info("No records");
@@ -65,10 +60,10 @@ public class PausingConsumer {
             records.forEach(record -> offsetList.add(record.offset()));
             LOGGER.info("Polled records : {}", offsetList);
 
-            for (ConsumerRecord<Long, Long> record : records) {
+            for (ConsumerRecord<Long, String> record : records) {
 
 
-                Instant validAfter = Instant.ofEpochMilli(record.timestamp()).plus(Duration.ofSeconds(VALID_AFTER_DURATION_IN_SECS));
+                Instant validAfter = Instant.ofEpochMilli(record.timestamp()).plus(validAfterDuration);
                 Instant now = Instant.now();
 
                 LOGGER.info("{} : Queued at {}, To be processing at {}", record.offset(), Instant.ofEpochMilli(record.timestamp()), validAfter);
@@ -79,7 +74,7 @@ public class PausingConsumer {
                     continue;
                 }
 
-                TopicPartition partition = new TopicPartition(TOPIC, record.partition());
+                TopicPartition partition = (TopicPartition) consumer.assignment().toArray()[0];
 
                 if(validAfter.compareTo(now) > 0) {
 
@@ -105,7 +100,7 @@ public class PausingConsumer {
                     Timer timer = new Timer("timerTask", false);
                     timer.schedule(timerTask, delay);
                 } else {
-                    LOGGER.info("{} : Delay executed. Committing...", record.offset());
+                    LOGGER.info("{} : Delay executed. Pushing message forward for processing...", record.offset());
                     // TODO : Push into another kafka topic
                     consumer.commitSync();
                 }
