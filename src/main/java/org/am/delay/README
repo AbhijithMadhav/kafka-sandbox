@@ -1,3 +1,15 @@
+This is a kafka based delay inducing component. This can be fitted into any workflow where delayed processing of messages
+is needed.
+
+Any amount of delay execution can be done.
+1. Create a new topic where messages that need a specific amount of delay need to be processed
+2. Configure the delay duration for this application through the properties file and we are good to go
+
+Atleast the required amount of delay is induced. Depending on the input rate, the delay requested may be exceeded. This
+can be minimized by scaling(refer to consumer notes)
+
+Post delay the same message can be pumped back into any other kafka topic for further processing
+
 Producer
 ========
 1. Uses spring-kafka
@@ -10,3 +22,5 @@ Consumer
 3. Executes delay
 4. Can be scaled by increasing number of partitions and having a consumer for each one
 5. A rough throughput measure shows an output rate of 3600 messages per second(laptop, local instance of kafka, single partition)
+
+
