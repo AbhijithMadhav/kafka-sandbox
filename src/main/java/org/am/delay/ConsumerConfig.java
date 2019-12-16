@@ -22,7 +22,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZE
 class ConsumerConfig {
 
     @Bean
-    public PausingConsumer pausingConsumer() {
+    public DelayConsumer pausingConsumer() {
         Properties consumerProps = new Properties();
         consumerProps.put(BOOTSTRAP_SERVERS_CONFIG, String.valueOf(getProperty("kafka-bootstrap-servers")));
         consumerProps.put(GROUP_ID_CONFIG, "pausing-consumers");
@@ -30,7 +30,7 @@ class ConsumerConfig {
         consumerProps.put(ISOLATION_LEVEL_CONFIG, "read_committed");
         consumerProps.put(KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer");
         consumerProps.put(VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer"); // TODO : custom serializer needed for custom message
-        return new PausingConsumer(consumerProps, Duration.ofSeconds(Long.valueOf(String.valueOf(getProperty("valid-after-duration-in-secs")))), Duration.ofMillis(Long.valueOf(String.valueOf(getProperty("polling-interval-in-millis")))));
+        return new DelayConsumer(consumerProps, Duration.ofSeconds(Long.valueOf(String.valueOf(getProperty("valid-after-duration-in-secs")))), Duration.ofMillis(Long.valueOf(String.valueOf(getProperty("polling-interval-in-millis")))));
     }
 
     @Bean

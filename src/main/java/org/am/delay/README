@@ -1,4 +1,4 @@
-This is a kafka based delay inducing component. This can be fitted into any workflow where delayed processing of messages
+This is a kafka based delay inducing component(Run `DelayConsumerApplication`). This can be fitted into any workflow where delayed processing of messages
 is needed.
 
 Any amount of delay execution can be done.

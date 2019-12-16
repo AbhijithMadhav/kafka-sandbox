@@ -19,15 +19,15 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class PausingConsumer {
+public class DelayConsumer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PausingConsumer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelayConsumer.class);
 
     private final Properties consumerProperties;
     private final Duration validAfterDuration;
     private final Duration pollIntervalDuration;
 
-    public PausingConsumer(Properties consumerProperties, Duration validAfterDuration, Duration pollIntervalDuration) {
+    public DelayConsumer(Properties consumerProperties, Duration validAfterDuration, Duration pollIntervalDuration) {
         this.consumerProperties = consumerProperties;
         this.validAfterDuration = validAfterDuration;
         this.pollIntervalDuration = pollIntervalDuration;
