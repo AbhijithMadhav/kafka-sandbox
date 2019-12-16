@@ -1,0 +1,12 @@
+Producer
+========
+1. Uses spring-kafka
+2. Sends simple random string messages
+
+Consumer
+=======
+1. Uses the kafka java API client
+2. Subscribes to a partition
+3. Executes delay
+4. Can be scaled by increasing number of partitions and having a consumer for each one
+5. A rough throughput measure shows an output rate of 3600 messages per second(laptop, local instance of kafka, single partition)
