@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.adapter.RecordFilterStrategy;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
@@ -38,7 +38,7 @@ public class BatchCommitConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(nConsumers);
         //factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL);
-        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.BATCH);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
         factory.setBatchListener(true);
 
         //factory.setRecordFilterStrategy(recordFilterStrategy());

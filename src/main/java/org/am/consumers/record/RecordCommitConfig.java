@@ -1,6 +1,5 @@
 package org.am.consumers.record;
 
-import org.am.consumers.AckTestConsumer;
 import org.am.consumers.NonAckTestConsumer;
 import org.am.producers.test.AppEvent;
 import org.apache.kafka.common.serialization.LongDeserializer;
@@ -10,7 +9,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
@@ -40,7 +39,7 @@ public class RecordCommitConfig {
         factory.setConcurrency(nConsumers);
 
         // commit strategy
-        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.RECORD);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
         return factory;
     }
 

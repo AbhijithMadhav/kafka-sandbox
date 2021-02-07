@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class TestConsumerKafkaConfig {
         factory.setConcurrency(nConsumers);
 
         // commit strategy
-        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.BATCH);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
         return factory;
     }
 

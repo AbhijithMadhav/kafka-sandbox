@@ -11,7 +11,7 @@ public class TestConsumerErrorhandler implements KafkaListenerErrorHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestConsumerErrorhandler.class);
 
     @Override
-    public Object handleError(Message<?> message, ListenerExecutionFailedException exception) throws Exception {
+    public Object handleError(Message<?> message, ListenerExecutionFailedException exception) {
 
         LOGGER.warn("Error processing message : {}", message, exception);
         return null;
