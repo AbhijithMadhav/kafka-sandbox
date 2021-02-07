@@ -61,7 +61,7 @@ public class BatchCommitConfig {
         //props.put(MAX_POLL_RECORDS_CONFIG, 10);
         //props.put(MAX_PARTITION_FETCH_BYTES_CONFIG, 128);
 
-        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer(AppEvent.class));
+        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer<>(AppEvent.class));
     }
 
     @Bean

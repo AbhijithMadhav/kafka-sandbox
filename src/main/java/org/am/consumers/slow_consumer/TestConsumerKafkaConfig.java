@@ -54,7 +54,7 @@ public class TestConsumerKafkaConfig {
         props.put(ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(MAX_POLL_INTERVAL_MS_CONFIG, 5000);
 
-        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer(AppEvent.class));
+        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer<>(AppEvent.class));
     }
 
     @Bean

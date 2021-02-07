@@ -52,7 +52,7 @@ public class RecordCommitConfig {
         props.put(GROUP_ID_CONFIG, "record-commit-consumers");
         props.put(ENABLE_AUTO_COMMIT_CONFIG, false);
 
-        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer(AppEvent.class));
+        return new DefaultKafkaConsumerFactory<>(props, new LongDeserializer(), new JsonDeserializer<>(AppEvent.class));
     }
 
     @Bean
