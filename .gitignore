@@ -1,0 +1,8 @@
+/kafka-sandbox.iml
+/kafka-sandbox.ipr
+/kafka-sandbox.iws
+/kafka-sandbox.main.iml
+/kafka-sandbox.test.iml
+/build/
+/.gradle/
+/.idea/
