@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -46,7 +50,7 @@ public class DelayConsumer {
                 consumer.resume(consumer.paused());
             }
 
-            ConsumerRecords<Long, String> records = consumer.poll(pollIntervalDuration.toMillis());
+            ConsumerRecords<Long, String> records = consumer.poll(pollIntervalDuration);
 
             if (records.isEmpty())
                 continue;

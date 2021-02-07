@@ -10,6 +10,12 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(JavaCompile) {
+    configure(options) {
+        options.compilerArgs << '-Xlint:deprecation' //<< '-Xlint:unchecked' // examples
+    }
+}
+
 dependencies {
 
     implementation 'org.springframework:spring-core:5.3.3'
